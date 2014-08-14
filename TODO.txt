@@ -1,0 +1,68 @@
+Varios
+======
+[] Mirar precios de gafas de realidad virtual en ebay, craiglist, dealextreme, etc. Buscar tiendas alternativas (¿foros?).
+[] Estudiar las condiciones de uso de Kickstarter en EEUU y en Inglaterra.
+[] Buscar y escribir un listado de alternativas a Kickstarter.
+
+
+IronMouse
+=========
+[] Implementar la entrada de datos por socket.
+[] Mejorar la implementación, suavizar los movimientos.
+
+
+
+Hardware IMU6410
+================
+[ok] <Placa> Instalar el bootloader. [Ref](program bootloader fuses.txt).
+[ok] <Placa> Comprobar que los fuses configurados son los correctos:
+    - No lock bits.
+    - No DIV8 frequency divisor by 8.
+    - Use external 11 MHz clock.
+[ok] <Placa> Medir que el procesador funciona realmente con el reloj externo a 11MHz. [Ref](board_speed_check).
+[] <Placa> Probar/medir que el cristal auxiliar externo funciona realmente a 32KHz.
+[] <Placa mala> Instalar el bootloader. [Ref](program bootloader fuses.txt).
+[] <Placa mala> Medir la frecuencia real del reloj externo (¿11 MHz?).
+[] <Placa mala> Medir la frecuencia real del cristal auxiliar externo (¿32 KHz?).
+[] <Placa mala> Medir la frecuencia real del reloj interno (¿8 MHz?).
+[] <Placa mala> Comprobar que los fuses configurados son los correctos.
+    - No lock bits.
+    - No DIV8 frequency divisor by 8.
+    - Use (internal / external?) clock.
+
+
+IronAHRS
+========
+[] <Placa> Generalizar el código de timers para que no dependa del funcionamiento a 11MHz y 32KHz.
+[] <Placa> Comprobar el tiempo de ejecución consumido en el bucle principal con los printf() del output. Decidir si pasar a output binario.
+[ok] <PC> Probar/medir que la frecuencia de recepción por puerto serie es la misma que la esperada por el algoritmo (20ms / 50Hz).
+[] <PC> Revisar la implementación del modelo 3D en Python. Ajustar el punto de vista de la cámara, si hace falta.
+[ok] <PC> Implementar la entrada de datos por socket en el modelo 3D de Python.
+[] <PC> (opc) Implementar la entrada de datos por socket en el modelo 3D de Processing.
+[] <PC> Añadir a la nueva arquitectura los algoritmos que se quieran probar: Madgwick, FreeIMU, el de Android, y cualquier otro.
+[ok] <PC> Integrar configuración de la aplicación por archivo CFG en lugar de #defines en el código.
+[] <PC> Implementar corrección de "gimbal lock" en algoritmo Razor. 
+[ok] <Placa> Separar la lógica de algoritmo de la lógica de bucle principal (entrada de comandos, selección de modo, etc.)
+[ok] <Placa+PC> Trasladar la lógica de algoritmo al PC para poder desarrollar más rápido.
+
+----
+
+[] <Placa> Configurar el giroscopio: ajustar el rango de sensibilidad.
+Info:
+El giroscopio puede configurarse para detectar hasta un máximo de 250, 500 ó 2000 grados por segundo ("dps"). Menor sensibilidad aporta mayor precisión y (NO CONFIRMADO) menor ruido. Ahora mismo está en 500 dps, pero es posible que debamos subirlo porque creo que una persona podría llegar a moverse más rápido que eso.
+Prueba empírica super científica: puedo rotar la mano 90º en unos 120 milisegundos; 90 / 0.12 = 750 grados por segundo.
+Debería visualizar los valores del giroscopio para comprobar si realmente consigo saturarlo y hacer que llegue a la máxima medición de 500 dps.
+
+----
+
+[ok] <Placa> Configurar el giroscopio: ajustar los filtros de frecuencia internos.
+Info:
+El giroscopio produce una señal útil a largo plazo, pero con muchísimo ruido a corto plazo. Por ello se le debe aplicar un filtro de paso bajo: las frecuencias bajas se mantienen, el ruido instantáneo se elimina.
+
+Conviene elegir para el filtro la frecuencia de corte ("cut-off") más baja que permita el chip. Por ejemplo para un muestreo de 100 Hz, ésto son 12,5 Hz. A cambio se pierden los movimientos rápidos y por tanto fluidez y velocidad de respuesta, pero la estabilidad y fiabilidad conseguidas lo compensan. Además en nuestra aplicación específica (detectar movimientos del cuerpo humano) los giros a detectar son de muchísima menos frecuencia que lo que el sensor es capaz de tratar.
+Fuente: http://scolton.blogspot.com.es/2011/12/slightly-more-quadrotor.html
+
+El giroscopio incluye además un filtro de paso alto. No nos interesa porque, de nuevo, en nuestra aplicación las frecuencias altas casi siempre llevarán ruido. Por tanto para este filtro tiene sentido escoger la frecuencia de corte más baja posible. Para muestreo de 100Hz: 0,01Hz.
+
+OJO: implícitamente, en esa web se habla de la vibración que toda la estructura tiene y aplica sobre los giroscopios, no sólo del error propio de los mismos. El filtro de paso bajo intenta por tanto reducir la cantidad de ruido inducida por la vibración de los motores, las hélices, etc.
+----

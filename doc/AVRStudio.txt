@@ -1,0 +1,15 @@
+AVR Studio
+==========
+
+Es el IDE de desarrollo oficial de Atmel. Está basado en Visual Studio y es gratuito (previo registro).
+
+* AVR Studio 6 (Visual Studio 2010): el compilador y herramientas asociadas ("toolkit") viene integrado y son versiones actualizadas de las del proyecto [AVR Libc](http://www.nongnu.org/avr-libc/), que provee avr-binutils, avr-gcc, avr-libc, linker, header files, etc. Los headers están revisados y la documentación ampliada respecto a la versión original de avr-libc o de WinAVR.
+
+* AVR Studio 4.19 (Visual Studio 2005): aún utilizada por muchos proyectos. No incluye compilador ni herramientas asociadas ("toolkit"), hay que aportarlo externamente con el paquete [WinAVR](http://winavr.sourceforge.net/) y configurar cada proyecto con las rutas a los ejecutables:
+
+    Project > Configuration options > Custom options > External tools
+        Use AVR toolchain: OFF
+        avr-gcc: %AVR32_HOME%\bin\avr-gcc.exe
+        make: %AVR32_HOME%\utils\bin\make.exe
+
+El proyecto de ejemplo "IMU6410 Data Logger V0.97" de la placa "SOC-Robotics IMU6410" fue creado con AVR Studio 4.19.

@@ -1,0 +1,23 @@
+Go to View Menu, select Solution Explorer or CTRL+ALT+L.
+Then Select the Project that you are developing and right click on that.
+Then select the Properties from the submenu.
+Then select the Configuration properties from the Tree structure.
+Under that, select C/C++ then select Advanced.
+Now in the right side pane change the property "Compile As" to "Compile as C++ Code".
+
+Under Preprocessor -> Definitions
+add "_USE_MATH_DEFINES".
+
+Using Winsock:
+http://stackoverflow.com/questions/6913373/help-with-linking-in-visual-c-express
+You should link with "ws2_32.lib" library. Specify it in project settings or in source code via pragma directive:
+#pragma comment(lib, "ws2_32.lib")
+
+You’ll find a folder named ipch and a large file with file extension .sdf if you use Visual Studio 2010. They exist for precompiled header files and intellisense.
+Left click “Tools > Options”, choose “Text Editor > C/C++ > Advanced”, scroll down until “Fallback Location” appears. Make “Always use Fallback Location” and “Do Not Warn if Fallback Location” to be “True”
+
+Para temas de Windows:
+Addition: AFAIK Visual C++ Express does not includes Platform SDK, so if you can't find library on your computer you should download and install
+Platform SDK (http://msdn.microsoft.com/en-us/windows/bb980924.aspx?wt.svl=more_downloads)
+and add necessary folders in
+Visual Studio "VC++ Directories" property page (http://msdn.microsoft.com/en-us/library/t9az1d21%28VS.90%29.aspx).

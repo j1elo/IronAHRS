@@ -1,0 +1,15 @@
+Yaw, Pitch, Roll
+================
+
+Definición:
+http://en.wikipedia.org/wiki/Flight_dynamics_(fixed_wing_aircraft)
+In flight dynamics, pitch, roll and yaw angles measure both the absolute attitude angles and changes in attitude angles. These are defined as:
+* Pitch (Y axis): angle of X body axis (nose) relative to horizon. Also a positive (nose up) rotation about Y body axis.
+* Roll (X axis): angle of Y body axis (wing) relative to horizon. Also a positive (right wing down) rotation about X body axis.
+* Yaw (Z axis): angle of X body axis (nose) relative to North. Also a positive (nose right) rotation about Z body axis.
+
+En español:
+http://es.wikipedia.org/wiki/%C3%81ngulos_de_navegaci%C3%B3n
+* Pitch: "elevación", "cabeceo".
+* Roll: "alabeo".
+* Yaw: "dirección", "guiñada".

@@ -1,0 +1,17 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Atmel Studio Solution File, Format Version 11.00
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "IronAHRS", "IronAHRS.cproj", "{623D1A2A-1C31-4BEA-AFA1-BE2CF6AB043D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Release|AVR = Release|AVR
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{623D1A2A-1C31-4BEA-AFA1-BE2CF6AB043D}.Release|AVR.ActiveCfg = Release|AVR
+		{623D1A2A-1C31-4BEA-AFA1-BE2CF6AB043D}.Release|AVR.Build.0 = Release|AVR
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

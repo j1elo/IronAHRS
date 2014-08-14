@@ -1,0 +1,28 @@
+Configuración de Atmel Studio 6 para IronAHRS
+=============================================
+
+Configuración de proyecto
+-------------------------
+
+- AVR C Compiler
+Defined symbols: F_CPU=11059200UL
+Optimization level: optimize for size: -Os
+Other flags: -std=gnu99
+
+- AVR Linker
+Memory FLASH segment: bootloader=0xf800
+Other flags: -Wl,-u,vfprintf -lprintf_flt
+
+
+Debug step by step
+------------------
+
+http://www.avrfreaks.net/index.php?name=PNphpBB2&file=printview&t=122968&start=0
+
+A bug in Atmel Studio 6.0 makes stepping over SEI overwrite the I flag (simulator and real hw).
+The reason is that Studio disables interrupts prior to single stepping, and restores the previous state of the interrupt enable bit afterwards. Unfortunately, the restore logic failed to account for instructions that change the bit directly (CLI, SEI, RETI). This affects both simulator and real hw.
+
+The workaround is either
+1. Not break/step over CLI, RETI or SEI
+or 
+2. Disabling the "Mask interrupts while stepping" option in "Tools | Options | Debugger".

@@ -1,0 +1,95 @@
+AVR coding FAQ
+==============
+
+## My program doesn't recognize a variable updated within an interrupt routine
+
+> When using the optimizer, in a loop like the following one:
+> 
+>     uint8_t flag;
+>     ISR(SOME_vect) {
+>       flag = 1;
+>     }
+>     while (flag == 0) {
+>       ...
+>     }
+> 
+> the compiler will typically access `flag` only once, and optimize further accesses completely away, since its code path analysis shows that nothing inside the loop could change the value of `flag` anyway. To tell the compiler that this variable could be changed outside the scope of its code path analysis (e. g. from within an interrupt routine), the variable needs to be declared like:
+> 
+>     volatile uint8_t flag;
+
+**Link**: [avr-libc FAQ](http://www.nongnu.org/avr-libc/user-manual/FAQ.html#faq_volatile).
+
+
+> To prevent the compiler from optimizing code as above, the `volatile` keyword is used:
+> 
+> In C:
+> 
+>     static int foo;
+>     void bar(void) {
+>       foo = 0;
+>       while (*(volatile int *)&foo != 255) {}
+>     }
+> 
+> In C++:
+> 
+>     static int foo;
+>     void bar(void) {
+>       foo = 0;
+>       while (const_cast<volatile int &>(foo) != 255) {}
+>     }
+
+**Link**: [Volatile variable](http://en.wikipedia.org/wiki/Volatile_variable#Example_of_memory-mapped_I.2FO_in_C).
+
+
+## Shouldn't I initialize all my variables?
+
+> Global and static variables are guaranteed to be initialized to 0 by the C standard. avr-gcc does this by placing the appropriate code into section .init4 (see the .initN Sections).
+> 
+> For the AVR target, in general, all integer-type variables are set to 0, all pointers to a `NULL` pointer, and all floating-point variables to 0.0.
+> 
+> Now if some programmer "wants to make doubly sure" their variables really get a 0 at program startup, and adds an initializer just containing 0 on the right-hand side, they waste space. While this waste of space applies to virtually any platform C is implemented on, it's usually not noticeable on larger machines like PCs, while the waste of flash ROM storage can be very painful on a small microcontroller like the AVR.
+> 
+> So in general, variables should only be explicitly initialized if the initial value is non-zero.
+
+**Link**: [avr-libc FAQ](http://www.nongnu.org/avr-libc/user-manual/FAQ.html#faq_varinit).
+
+
+## What registers are used by the C compiler?
+
+> Data types:
+> `char` is 8 bits, `int` is 16 bits, `long` is 32 bits, `long long` is 64 bits, `float` and `double` are 32 bits (this is the only supported floating point format), pointers are 16 bits (function pointers are word addresses, to allow addressing up to 128K program memory space). There is a `-mint8` option (see Options for the C compiler avr-gcc) to make `int` 8 bits, but that is not supported by avr-libc and violates C standards (`int` must be at least 16 bits).
+
+**Link**: [avr-libc FAQ](http://www.nongnu.org/avr-libc/user-manual/FAQ.html#faq_reg_usage).
+
+
+## Why does the compiler compile an 8-bit operation that uses bitwise operators into a 16-bit operation in assembly?
+
+> Bitwise operations in Standard C will automatically promote their operands to an `int`, which is (by default) 16 bits in avr-gcc. To work around this use typecasts on the operands, including literals, to declare that the values are to be 8 bit operands.
+> 
+> This may be especially important when clearing a bit:
+> 
+>     var &= ~mask;  /* wrong way! */
+> 
+> The bitwise "not" operator (`~`) will also promote the value in mask to an `int`. To keep it an 8-bit value, typecast before the "not" operator:
+> 
+>     var &= (unsigned char)~mask;
+
+**Link**: [avr-libc FAQ](http://www.nongnu.org/avr-libc/user-manual/FAQ.html#faq_intpromote).
+
+
+## Why do all my "foo...bar" strings eat up the SRAM?
+
+By default, all strings are handled as all other initialized variables: they occupy RAM, and occupy the same amount of flash ROM so they can be initialized to the actual string by startup code.
+
+Of course, this is going to waste a lot of SRAM. In Program Space String Utilities, a method is described how such constant data can be moved out to flash ROM.
+
+**Link**: [avr-libc FAQ](http://www.nongnu.org/avr-libc/user-manual/FAQ.html#faq_flashstrings).
+
+
+## Which `-O` flag to use?
+
+There's a common misconception that larger numbers behind the `-O` option might automatically cause "better" optimization.
+
+Generally, it seems `-Os -mcall-prologues` is the most universal "best" optimization level. Only applications that need to get the last few percent of speed benefit from using `-O3`.
+
+**Link**: [avr-libc FAQ](http://www.nongnu.org/avr-libc/user-manual/FAQ.html#faq_optflags).

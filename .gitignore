@@ -1,0 +1,13 @@
+# No object and archive files.
+*.[oa]
+
+# No editor temporary files.
+*~
+
+# No build directories.
+Debug/
+Release/
+
+# No Visual Studio stuff.
+ipch/
+*.sdf

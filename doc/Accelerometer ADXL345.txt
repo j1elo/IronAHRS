@@ -1,0 +1,30 @@
+Notación establecida
+--------------------
+
+`1g = -9.8 m/s^2`
+
+Por tanto, los ejes del sensor miden `+1g` cuando están mirando hacia arriba, no hacia abajo.
+
+Otra manera de verlo: en estado de reposo, el sensor mide la aceleración Normal a la fuerza de la gravedad, esto es, la fuerza que se opone a la gravedad en sentido opuesto (hacia arriba), y que es ejercida por la superficie que esté sujetando a la placa.
+
+
+Medidas del sensor
+------------------
+
+    Eje X mirando hacia arriba:
+    X = 1g
+    Y = Z = 0g
+
+    Eje Y mirando hacia arriba:
+    Y = 1g
+    X = Z = 0g
+
+    Eje Z mirando hacia arriba:
+    Z = 1g
+    X = Y = 0g
+
+
+Compensación de Bias
+--------------------
+
+Because the value placed in an offset register is additive, a negative value is placed into the register to eliminate a positive offset and vice versa for a negative offset.

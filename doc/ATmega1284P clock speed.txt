@@ -1,0 +1,43 @@
+----
+http://www.avrfreaks.net/index.php?name=PNphpBB2&file=printview&t=45299&start=0
+
+The AVR itself doesn't care what speed it runs at, as long as it's within its specification. Most AVRs have an internal oscillator than can be set via the fuse bits. If you're wanting to communicate serially with another device, you'll most likely want to use a crystal as these are more accurate than the internal oscillator. Also, if you were building a device that needs accurate timing, like a digital clock, then using a crystal would also be advisable. The selection for using a crystal is also done using the fuses.
+
+Timers, UART, etc, expect to run at various rates depending on the application. UARTs are used for asynchronous serial I/O. The baud rate generally has to be within about 2% or better. If you want to use the UART this way, you are best off using a crystal oscillator.
+
+To determine the correct fuse settings I found out that this fuse calcualtor is always very helpful.
+http://palmavr.sourceforge.net/cgi-bin/fc.cgi
+
+Whenever you use the USART for some kind of RS232 communication or you need exact timings use a crystal oscillator. It simply has 2 pins which must be connected to the XTAL1/XTAL2 pins of your AVR. In addition you have to connect to each XTAL pin a small capacitor of 12-22pF. However, the article Why you need a Clock Source gives you more details.
+http://www.avrfreaks.net/index.php?module=FreaksArticles&func=viewArticles
+
+----
+
+http://www.avrfreaks.net/index.php?name=PNphpBB2&file=viewtopic&p=522178
+
+Is there a way to know at what frequency is the processor running?
+
+If the CKSEL fuse is set for an internal oscillator it will be either 8MHz (1Mhz with CKDIV8 on). If it is using an external crystal you should look up the part number. If you don't know, it's probably using an internal one. 
+Here's a basic tutorial on the subject:
+http://www.sparkfun.com/tutorials/95
+
+----
+
+http://www.avrfreaks.net/index.php?name=PNphpBB2&file=viewtopic&t=111180
+
+Para 16MHZ:
+UBRR = ((F_CPU / (16UL * BAUD)) - 1)
+
+Garbage data usually means incorrect baud rate. All done automatically if you learn to use setbaud.h.
+
+http://www.wormfood.net/avrbaudcalc.php
+
+----
+
+http://www.avrfreaks.net/index.php?name=PNphpBB2&file=viewtopic&t=90287
+
+
+Techniques for detecting clock speed
+
+----
+

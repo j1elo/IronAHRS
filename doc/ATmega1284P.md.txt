@@ -1,0 +1,89 @@
+Clock Sources
+=============
+
+- Internal RC Oscillator provides an approximate 8.0MHz clock.
+- Internal low power Oscillator provides a 128kHz clock.
+- By default the fuse `CKDIV8` is programmed, resulting in 1/8 system clock.
+- By default the startup time is set to maximum and time-out period enabled (`CKSEL = "0010", SUT = "10", CKDIV8 = "0"`).
+
+> ##### WARNING
+> - ISP programmer must work at 1/4 the system clock.
+> - USBasp programmer works by default at 375kHz, so system clock must be at least 1,5MHz. If system clock is slower, then `-B` option must be used in AVRdude command line.
+
+The device can operate its Timer/Counter2 from an external 32.768kHz watch crystal or a exter-
+nal clock source.
+
+
+Timers
+======
+
+Timer/Counter0: 8-bit, PWM
+--------------------------
+
+* Source: the Timer/Counter can be clocked internally, via the prescaler, or by an external clock source on the `T0` pin.
+    - See "Timer/Counter Prescaler" on page 155.
+    - The source is selected by the Clock Select bits `CS0(2:0)`, located in the Timer/Counter Control Register `TCCR0B`.
+    - When no clock source is selected (`CS02:0 = 0`) the timer is stopped.
+* Sequence: counting sequence is determined by bits `WGM0(2:0)` located in the Timer/Counter Control Registers `TCCR0(B:A)`.
+* Value: The Timer/Counter (`TCNT0`) and Output Compare Registers (`OCR0A` and `OCR0B`) are 8-bit registers.
+* Interrupts: interrupt request signals are all visible in the Timer Interrupt Flag Register (`TIFR0`). All interrupts are individually masked with the Timer Interrupt Mask Register (`TIMSK0`).
+    - The Timer/Counter Overflow Flag (`TOV0`) is set according to the mode of operation selected by the `WGM02:0` bits. `TOV0` can be used for generating a CPU interrupt.
+    - Output Compare interrupt: when `TCNT0` equals `OCR0A` or `OCR0B`:
+        1. The Output Compare Flag (`OCF0A` or `OCF0B`) is set.
+        2. If enabled, an Output Compare interrupt is generated.
+        3. The Output Compare Flag can be cleared by software by writing a logical one to its I/O bit location, or it is automatically cleared when the interrupt is executed.
+* PWM: `OC0A` and `OC0B` pins are used to output the PWM signal, controlled by the `COM0A(1:0)` and `COM0B(1:0)` bits.
+
+
+Timer/Counter2: 8-bit
+---------------------
+
+ It is by default connected to the main system I/O clock `clkIO`. By setting the `AS2` bit in `ASSR`, Timer/Counter2 is asynchronously clocked from the `TOSC1` pin. By setting the `EXCLK` bit in the `ASSR`, a 32kHz external clock can be applied.
+
+
+
+WHERE?
+======
+XTAL1: input to the inverting Oscillator amplifier and input to the internal clock operating circuit.
+XTAL2: output from the inverting Oscillator amplifier.
+
+
+Memory
+======
+
+The AVR architecture has two main memory spaces, the Data Memory and the Program Memory space. In addition, the ATmega1284P features an EEPROM Memory for data storage.
+
+The I/O memory space contains 64 addresses for CPU peripheral functions as Control Registers, SPI, and other I/O functions. The I/O Memory can be accessed directly, or as the Data Space locations following those of the Register File, 0x20 - 0x5F. In addition, the ATmega1284P has Extended I/O space from 0x60 - 0xFF in SRAM where only the ST/STS/STD and LD/LDS/LDD instructions can be used.
+
+The high-performance AVR ALU operates in direct connection with all the 32 general purpose working registers. Each register is also assigned a data memory address, mapping them directly into the first 32 locations of the user Data Space.
+
+
+Ports
+=====
+
+* Port A serves as analog inputs to the Analog-to-digital Converter. Port A also serves as an 8-bit bi-directional I/O port with internal pull-up resistors (selected for each bit). As inputs, Port A pins that are externally pulled low will source current if the pull-up resistors are activated. Port A also serves the functions of various special features as listed on page 80.
+
+* Port B is an 8-bit bi-directional I/O port with internal pull-up resistors (selected for each bit). Port B also serves the functions of various special features as listed on page 82.
+
+* Port C is an 8-bit bi-directional I/O port with internal pull-up resistors (selected for each bit). As inputs, Port C pins that are externally pulled low will source current if the pull-up resistors are activated. Port C also serves the functions of the JTAG interface, along with special features as listed on page 85.
+
+* Port D is an 8-bit bi-directional I/O port with internal pull-up resistors (selected for each bit). As inputs, Port D pins that are externally pulled low will source current if the pull-up resistors are activated. Port D also serves the functions of various special features as listed on page 88.
+
+
+Port Registers
+--------------
+
+The physical I/O Registers and bit locations are listed in "Register Description" on page 91. A lower case `x` represents the numbering letter for the port, and a lower case `n` represents the bit number.
+
+Three I/O memory address locations are allocated for each port, one each for:
+
+* Data Direction Register (`DDRx`), *read/write*.  
+The `DDxn` bit in the `DDRx` Register selects the direction of this pin. If `DDxn` is written logic one, `Pxn` is configured as an output pin. If `DDxn` is written logic zero, `Pxn` is configured as an input pin.
+
+* Data Register (`PORTx`), *read/write*.  
+If `PORTxn` is written logic one when the pin is configured as an input pin, the pull-up resistor is activated. To switch the pull-up resistor off, `PORTxn` has to be written logic zero or the pin has to be configured as an output pin. If `PORTxn` is written logic one when the pin is configured as an output pin, the port pin is driven high (one). If `PORTxn` is written logic zero when the pin is configured as an output pin, the port pin is driven low (zero).
+
+* Port Input Pins (`PINx`), *read only*.
+Writing a logic one to `PINxn` toggles the value of `PORTxn`, independent on the value of `DDRxn`. Independent of the setting of Data Direction bit `DDxn`, the port pin can be read through the `PINxn` Register bit.
+
+Using the I/O port as General Digital I/O is described in "Ports as General Digital I/O" on page 73. Most port pins are multiplexed with alternate functions for the peripheral features on the device, described in "Alternate Port Functions" on page 78. Enabling the alternate function of some of the port pins does not affect the use of the other pins in the port as general digital I/O.

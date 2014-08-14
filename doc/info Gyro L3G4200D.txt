@@ -1,0 +1,1 @@
+El sentido de giro en IMU6410 Hardware Reference Guide está invertido por error en el eje X (el que sale por el lado del conector USB).

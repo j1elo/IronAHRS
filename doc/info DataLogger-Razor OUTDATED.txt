@@ -1,0 +1,67 @@
+Commands that the firmware understands:
+  
+  "#o<param>" - Set output parameter. The available options are:
+      "#o0" - Disable continuous streaming output.
+      "#o1" - Enable continuous streaming output.
+      "#ob" - Output angles in binary format (yaw/pitch/roll as binary float, so one output frame
+              is 3x4 = 12 bytes long).
+      "#ot" - Output angles in text format (Output frames have form like "#YPR=-142.28,-5.38,33.52",
+              followed by carriage return and line feed [\r\n]).
+      "#os" - Output (calibrated) sensor data of all 9 axes in text format. One frame consist of
+              three lines - one for each sensor.
+	  "#oS" - Outputs in SerialChart software format.
+              three lines - one for each sensor.
+      "#oc" - Go to calibration output mode.
+      "#on" - When in calibration mode, go on to calibrate next sensor.
+      "#oe0" - Disable error message output.
+      "#oe1" - Enable error message output.
+    
+  "#f" - Request one output frame - useful when continuous output is disabled and updates are
+         required in larger intervals only.
+  "#s<xy>" - Request synch token - useful to find out where the frame boundaries are in a continuous
+         binary stream or to see if tracker is present and answering. The tracker will send
+         "#SYNCH<xy>\r\n" in response (so it's possible to read using a readLine() function).
+         x and y are two mandatory but arbitrary bytes that can be used to find out which request
+         the answer belongs to.
+  "#r" - Reset sensor fusion (call to razor_setup()).
+		 
+
+Valores del acelerómetro:
+Máximo: X * 0.0039 = 16g -> X = 4102
+Mínimo: X * 0.0039 = -16g -> X = -4102
+Máximo gravedad: X * 0.0039 = 1g -> X = 256
+Mínimo gravedad: X * 0.0039 = -1g -> X = -256
+
+1) Accel_Calib();
+Halla Bias (con escalado) del acc (hace media de 50 muestras).
+Guarda en AccelBias[];
+
+2) Gyro_Calib()
+Halla Bias (con escalado) del giro (hace media de 50 muestras).
+Guarda en GyroBias[];
+
+3) ReadAccelGyroMag(); // Read raw values
+Guarda valores de acc, giro, mag en imu6410_raw.*
+
+4) ConvertIMU6410Raw(); // Mismo escalado que en DisplayDOF10WData() PERO sin gyroscale y magscale.
+Reescala valores de acc, giro, mag en imu6410_raw.*
+
+5) CorrectAccelGyro(); // Unbias Accel, Gyro Data
+Elimina Bias de acc, giro en imu6410_raw.*
+
+6-opt) CorrectGyroMagnetometer();
+?? DUDA. Corrige valores de gyro y mag (sólo cambia de eje).
+
+7) PrintAccelGyroMag();
+Imprime valores de acc, giro y mag guardados en imu6410_raw.*
+
+Razor
+-----
+
+loop()
+	read_sensors()
+		Read_Gyro() -> Valores de gyro en gyro[0,1,2] (X,Y,Z)
+		Read_Accel() -> Valores de acc en accel[0,1,2] (X,Y,Z)
+		Read_Magn() -> Valores de mag en magnetom[0,1,2] (X,Y,Z)
+	
+		
