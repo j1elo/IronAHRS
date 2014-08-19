@@ -1,7 +1,14 @@
 IronAHRS
 ========
 
-A custom Attitude and Heading Reference System (AHRS) built on a SOC Robotics IMU6410 development board.
+A custom Attitude and Heading Reference System (AHRS) built on a SOC Robotics IMU6410 development board. This was a small step on our personal "Virtual Reality head-mounted display" technology project.
+
+See it in action:
+
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=CbZY3lHCA_A"
+target="_blank"><img src="http://img.youtube.com/vi/CbZY3lHCA_A/0.jpg" 
+alt="Playing a FPS game with an IMU/AHRS Attitude Tracker"
+width="240" height="180" border="10" /></a>
 
 This project serves as an integration and test bench for different IMU and AHRS algorithms. Currently, the incorporated implementation of signal filtering is the one made by Sparkfun for their *9DOF Razor IMU* board: the [Razor AHRS firmware](https://github.com/ptrbrtz/razor-9dof-ahrs).
 
