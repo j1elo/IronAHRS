@@ -3,7 +3,7 @@ IronAHRS
 
 A custom Attitude and Heading Reference System (AHRS) built on a SOC Robotics IMU6410 development board. This was a small step on our personal "Virtual Reality head-mounted display" technology project.
 
-See it in action:
+See it in action (**click for a video**):
 
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=CbZY3lHCA_A"
 target="_blank"><img src="http://img.youtube.com/vi/CbZY3lHCA_A/0.jpg" 
