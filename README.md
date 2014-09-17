@@ -3,10 +3,10 @@ IronAHRS
 
 A custom Attitude and Heading Reference System (AHRS) built on a SOC Robotics IMU6410 development board. This was a small step on our personal "Virtual Reality head-mounted display" technology project.
 
-See it in action (**click for a video**):
+It allowed us to simulate a game play in which the device would follow any movement made by the player's head. See it in action! (**[click for a video](http://www.youtube.com/watch?v=CbZY3lHCA_A)**):
 
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=CbZY3lHCA_A"
-target="_blank"><img src="http://img.youtube.com/vi/CbZY3lHCA_A/0.jpg" 
+target="_blank"><img src="https://raw.githubusercontent.com/j1elo/IronAHRS/master/doc/IronAHRS-thumbnail-film.jpg" 
 alt="Playing a FPS game with an IMU/AHRS Attitude Tracker"
 width="240" height="180" border="10" /></a>
 
