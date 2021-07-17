@@ -1,7 +1,7 @@
-Configuración de Atmel Studio 6 para IronAHRS
+ConfiguraciÃ³n de Atmel Studio 6 para IronAHRS
 =============================================
 
-Configuración de proyecto
+ConfiguraciÃ³n de proyecto
 -------------------------
 
 - AVR C Compiler

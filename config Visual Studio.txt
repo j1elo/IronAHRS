@@ -13,8 +13,8 @@ http://stackoverflow.com/questions/6913373/help-with-linking-in-visual-c-express
 You should link with "ws2_32.lib" library. Specify it in project settings or in source code via pragma directive:
 #pragma comment(lib, "ws2_32.lib")
 
-You’ll find a folder named ipch and a large file with file extension .sdf if you use Visual Studio 2010. They exist for precompiled header files and intellisense.
-Left click “Tools > Options”, choose “Text Editor > C/C++ > Advanced”, scroll down until “Fallback Location” appears. Make “Always use Fallback Location” and “Do Not Warn if Fallback Location” to be “True”
+You'll find a folder named ipch and a large file with file extension .sdf if you use Visual Studio 2010. They exist for precompiled header files and intellisense.
+Left click "Tools > Options", choose "Text Editor > C/C++ > Advanced", scroll down until "Fallback Location" appears. Make "Always use Fallback Location" and "Do Not Warn if Fallback Location" to be "True".
 
 Para temas de Windows:
 Addition: AFAIK Visual C++ Express does not includes Platform SDK, so if you can't find library on your computer you should download and install
